@@ -1,6 +1,8 @@
 # to_dos
 
 A new Flutter project.
+For Daily todo's 
+easy to use with clean ui
 
 ## Getting Started
 
