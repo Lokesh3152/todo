@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
               GoogleFonts.nunitoSansTextTheme(Theme.of(context).textTheme)),
       debugShowCheckedModeBanner: false,
       title: "my todo list",
-      home: homescreen(),
+      home: Homescreen(),
     );
   }
 }

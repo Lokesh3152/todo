@@ -1,53 +1,103 @@
 import 'package:flutter/material.dart';
+import 'package:to_dos/screens/taskpage.dart';
 
-class homescreen extends StatefulWidget {
+class Homescreen extends StatefulWidget {
   @override
-  _homescreenState createState() => _homescreenState();
+  _HomescreenState createState() => _HomescreenState();
 }
 
-class _homescreenState extends State<homescreen> {
+class _HomescreenState extends State<Homescreen> {
   Color bg_color = Color(0xffFCFCFC);
   Color title_color = Color(0xff161D6F);
   Color FAB_color = Color(0xff7579E7);
 
+  Widget buildtodo(int index) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(35, 5, 5, 5),
+      child: CheckboxListTile(
+        controlAffinity: ListTileControlAffinity.leading,
+        title: Text(
+          "Todo1",
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w200, color: Colors.black),
+        ),
+        subtitle: Text("9:30PM-High"),
+        value: false,
+        onChanged: (value) {
+          print("value");
+        },
+        activeColor: Theme.of(context).primaryColor,
+        contentPadding: EdgeInsets.all(0),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-          child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 30,
-                vertical: 100,
+      appBar: AppBar(
+        toolbarHeight: 250,
+        backgroundColor: bg_color,
+        elevation: 0,
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(30, 80, 10, 0),
+          child: RichText(
+            text: TextSpan(
+                text: "Hey Lucky your's\n",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black,
+                  height: 1,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: "To-Do's\n",
+                    style: TextStyle(
+                      fontSize: 46,
+                      fontWeight: FontWeight.bold,
+                      color: title_color,
+                      height: 1.5,
+                    ),
+                  ),
+                  TextSpan(
+                    text: "0/3 Completed",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w200,
+                      color: Colors.black,
+                      height: 3.5,
+                    ),
+                  ),
+                ]),
+          ),
+        ),
+      ),
+      body: ListView.builder(
+        itemCount: 10,
+        itemBuilder: (BuildContext context, int index) {
+          if (index == 0) {
+            return Padding(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[],
               ),
-              child: RichText(
-                  text: TextSpan(
-                      style: DefaultTextStyle.of(context).style,
-                      children: [
-                    TextSpan(
-                        text: "Hey Lucky\n",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20,
-                            decoration: TextDecoration.none,
-                            height: 1.5)),
-                    TextSpan(
-                        text: "To-Do's",
-                        style: TextStyle(
-                            color: title_color,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 36,
-                            height: 1.6,
-                            decoration: TextDecoration.none))
-                  ]))
-              //  Text(
-              //   "Hey Lucky",
-              //   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
-              // ),
-              )),
+            );
+          }
+          return buildtodo(index);
+        },
+      ),
       backgroundColor: bg_color,
+
+      //FAB
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Taskpage()),
+          );
+        },
         label: Text("Add"),
         icon: Icon(Icons.add),
         backgroundColor: FAB_color,
