@@ -7,8 +7,11 @@ class Homescreen extends StatefulWidget {
 }
 
 class _HomescreenState extends State<Homescreen> {
+  // ignore: non_constant_identifier_names
   Color bg_color = Color(0xffFCFCFC);
+  // ignore: non_constant_identifier_names
   Color title_color = Color(0xff161D6F);
+  // ignore: non_constant_identifier_names
   Color FAB_color = Color(0xff7579E7);
 
   Widget buildtodo(int index) {
