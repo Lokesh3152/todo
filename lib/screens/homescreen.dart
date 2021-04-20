@@ -7,9 +7,12 @@ class Homescreen extends StatefulWidget {
 }
 
 class _HomescreenState extends State<Homescreen> {
-  final bg_color = Color(0xffFCFCFC);
-  final title_color = Color(0xff161D6F);
-  final FAB_color = Color(0xff7579E7);
+  // ignore: non_constant_identifier_names
+  Color bg_color = Color(0xffFCFCFC);
+  // ignore: non_constant_identifier_names
+  Color title_color = Color(0xff161D6F);
+  // ignore: non_constant_identifier_names
+  Color FAB_color = Color(0xff7579E7);
 
   Widget buildtodo(int index) {
     return Padding(
