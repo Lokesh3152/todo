@@ -7,10 +7,7 @@ class Taskpage extends StatefulWidget {
 
 class _TaskpageState extends State<Taskpage> {
   final _formkey = GlobalKey<FormState>();
-  String _title = '';
-  String _desc = '';
   String _priority;
-  DateTime _date = DateTime.now();
 
   final List<String> _priorites = ['none', 'low', 'medium', 'high'];
 
