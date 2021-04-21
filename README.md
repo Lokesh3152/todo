@@ -4,6 +4,10 @@ A new Flutter project.
 For Daily todo's 
 easy to use with clean ui
 
+## screenshots
+![image](https://user-images.githubusercontent.com/54428357/115554261-e771fc80-a2cb-11eb-9e37-84edf10a12b3.png)
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
