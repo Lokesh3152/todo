@@ -5,7 +5,7 @@ For Daily todo's
 easy to use with clean ui
 
 ## screenshots
-
+![Home-first-time](https://user-images.githubusercontent.com/54428357/115554370-01abda80-a2cc-11eb-8c06-d4a51d07d4f5.png)
 
 
 ## Getting Started
