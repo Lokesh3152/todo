@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 class Taskpage extends StatefulWidget {
   @override
@@ -8,12 +7,31 @@ class Taskpage extends StatefulWidget {
 
 class _TaskpageState extends State<Taskpage> {
   final _formkey = GlobalKey<FormState>();
+  // ignore: unused_field
   String _title = '';
-  String _desc = '';
   String _priority;
-  DateTime _date = DateTime.now();
-
+  TimeOfDay selectedTime = TimeOfDay.now();
+  TextEditingController _timecontroller = TextEditingController();
   final List<String> _priorites = ['none', 'low', 'medium', 'high'];
+
+  _timepicker() async {
+    final TimeOfDay pickedS = await showTimePicker(
+        context: context,
+        initialTime: selectedTime,
+        builder: (BuildContext context, Widget child) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+            child: child,
+          );
+        });
+
+    if (pickedS != null && pickedS != selectedTime) {
+      setState(() {
+        selectedTime = pickedS;
+      });
+      _timecontroller.text = selectedTime.format(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +58,12 @@ class _TaskpageState extends State<Taskpage> {
                     child: Column(
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 50.0),
+                          padding: const EdgeInsets.fromLTRB(10, 50, 50, 30),
                           child: TextFormField(
                             decoration: InputDecoration(
-                                hintText: 'Enter task name',
-                                border: InputBorder.none),
+                              hintText: 'Enter task name',
+                              border: InputBorder.none,
+                            ),
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w300,
@@ -53,13 +71,15 @@ class _TaskpageState extends State<Taskpage> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 1.0),
+                          padding: const EdgeInsets.fromLTRB(10, 20, 10, 30),
                           child: TextFormField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
+                            readOnly: true,
+                            showCursor: false,
+                            controller: _timecontroller,
+                            onTap: _timepicker,
+                            keyboardType: TextInputType.text,
                             decoration: InputDecoration(
-                                hintText: 'Enter Description',
+                                hintText: 'Select TIme',
                                 border: InputBorder.none),
                             style: TextStyle(
                               fontSize: 20,
@@ -72,7 +92,9 @@ class _TaskpageState extends State<Taskpage> {
                               horizontal: 10.0, vertical: 10.0),
                           child: DropdownButtonFormField(
                             icon: Icon(Icons.arrow_drop_down_circle_outlined),
+                            elevation: 16,
                             iconSize: 28,
+                            dropdownColor: Colors.blue[50],
                             iconEnabledColor: Theme.of(context).primaryColor,
                             items: _priorites.map((String priority) {
                               return DropdownMenuItem(
@@ -103,6 +125,26 @@ class _TaskpageState extends State<Taskpage> {
                               });
                             },
                             value: _priority,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 380, 0, 0),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                'Add',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
                           ),
                         )
                       ],

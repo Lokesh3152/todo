@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:to_dos/screens/settings.dart';
 import 'package:to_dos/screens/taskpage.dart';
 
 class Homescreen extends StatefulWidget {
@@ -7,9 +8,9 @@ class Homescreen extends StatefulWidget {
 }
 
 class _HomescreenState extends State<Homescreen> {
-  Color bg_color = Color(0xffFCFCFC);
-  Color title_color = Color(0xff161D6F);
-  Color FAB_color = Color(0xff7579E7);
+  Color bgColor = Color(0xffFCFCFC);
+  Color titleColor = Color(0xff161D6F);
+  Color fabColor = Color(0xff7579E7);
 
   Widget buildtodo(int index) {
     return Padding(
@@ -36,8 +37,22 @@ class _HomescreenState extends State<Homescreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.settings_applications_rounded,
+              color: Theme.of(context).primaryColor,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Settings()),
+              );
+            },
+          ),
+        ],
         toolbarHeight: 250,
-        backgroundColor: bg_color,
+        backgroundColor: bgColor,
         elevation: 0,
         title: Padding(
           padding: const EdgeInsets.fromLTRB(30, 80, 10, 0),
@@ -56,7 +71,7 @@ class _HomescreenState extends State<Homescreen> {
                     style: TextStyle(
                       fontSize: 46,
                       fontWeight: FontWeight.bold,
-                      color: title_color,
+                      color: titleColor,
                       height: 1.5,
                     ),
                   ),
@@ -74,7 +89,7 @@ class _HomescreenState extends State<Homescreen> {
         ),
       ),
       body: ListView.builder(
-        itemCount: 10,
+        itemCount: 5,
         itemBuilder: (BuildContext context, int index) {
           if (index == 0) {
             return Padding(
@@ -88,20 +103,36 @@ class _HomescreenState extends State<Homescreen> {
           return buildtodo(index);
         },
       ),
-      backgroundColor: bg_color,
+      backgroundColor: bgColor,
 
       //FAB
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Taskpage()),
-          );
+          Navigator.of(context).push(_createRoute());
         },
         label: Text("Add"),
         icon: Icon(Icons.add),
-        backgroundColor: FAB_color,
+        backgroundColor: fabColor,
       ),
+    );
+  }
+
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => Taskpage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(0, 1.0);
+        var end = Offset.zero;
+        var curve = Curves.easeIn;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
     );
   }
 }
