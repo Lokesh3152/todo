@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:to_dos/db/database.dart';
+import 'package:to_dos/db/model.dart';
 import 'package:to_dos/screens/settings.dart';
 import 'package:to_dos/screens/taskpage.dart';
 
@@ -8,13 +10,26 @@ class Homescreen extends StatefulWidget {
 }
 
 class _HomescreenState extends State<Homescreen> {
+  Future<List<Task>> _taskList;
+
+  void initState() {
+    super.initState();
+    _updateTaskList();
+  }
+
+  _updateTaskList() {
+    setState(() {
+      _taskList = DatabaseHelper.instance.getTaskList();
+    });
+  }
+
   Color bgColor = Color(0xffFCFCFC);
   Color titleColor = Color(0xff161D6F);
   Color fabColor = Color(0xff7579E7);
 
   Widget buildtodo(int index) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(35, 5, 5, 5),
+      padding: const EdgeInsets.fromLTRB(35, 5, 35, 5),
       child: CheckboxListTile(
         controlAffinity: ListTileControlAffinity.leading,
         title: Text(
@@ -24,9 +39,8 @@ class _HomescreenState extends State<Homescreen> {
         ),
         subtitle: Text("9:30PM-High"),
         value: false,
-        onChanged: (value) {
-          print("value");
-        },
+        onChanged: (value) {},
+        checkColor: Colors.white,
         activeColor: Theme.of(context).primaryColor,
         contentPadding: EdgeInsets.all(0),
       ),
@@ -38,17 +52,24 @@ class _HomescreenState extends State<Homescreen> {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.settings_applications_rounded,
-              color: Theme.of(context).primaryColor,
+          Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                icon: Icon(
+                  Icons.settings,
+                  size: 25,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Settings()),
+                  );
+                },
+              ),
             ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Settings()),
-              );
-            },
           ),
         ],
         toolbarHeight: 250,
@@ -76,7 +97,7 @@ class _HomescreenState extends State<Homescreen> {
                     ),
                   ),
                   TextSpan(
-                    text: "0/3 Completed",
+                    text: "$completedTaskCount/${snapshot.data.length} Completed",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w200,
@@ -88,21 +109,42 @@ class _HomescreenState extends State<Homescreen> {
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: 5,
-        itemBuilder: (BuildContext context, int index) {
-          if (index == 0) {
-            return Padding(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[],
-              ),
+      body: FutureBuilder(
+          future: _taskList,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 10,
+                ),
+                child: Text(
+                  'Looks\nLike There Are\nNothing\nTo-do',
+                  style: TextStyle(
+                    color: Colors.black12,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40,
+                  ),
+                ),
+              );
+            }
+            final int _completedTaskCount = snapshot.data.where({Task task} => task.status == 1).toList().length;
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                if (index == 0) {
+                  return Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[],
+                    ),
+                  );
+                }
+                return buildtodo(snapshot.data[index]);
+              },
             );
-          }
-          return buildtodo(index);
-        },
-      ),
+          }),
       backgroundColor: bgColor,
 
       //FAB
