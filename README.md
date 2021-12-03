@@ -1,4 +1,4 @@
-# to_dos
+# Todo's
 
 A new Flutter project.
 For Daily todo's 
